@@ -3,6 +3,7 @@ import time
 
 class conway:
     #THis is a test
+    #This is a second test
     mouse_x = 0
     mouse_y = 0
     def __init__(self, window_width, window_height, cell_width, cell_height):
