@@ -2,26 +2,26 @@ import pygame
 import time
 
 class conway:
-    mouse_x = 0
-    mouse_y = 0
-    horizontal_cells = 0
-    vertical_cells = 0
     cycles = 0
     def __init__(self, window_width, window_height, cell_width, cell_height):
         self.screen=pygame.display.set_mode([window_width, window_height])
         self.cell_width = cell_width
         self.cell_height = cell_height
-        self.coords = []
-        for y in range(round(pygame.display.get_window_size()[1] / cell_height)):
-            self.coords.append([])
-            for x in range(round(pygame.display.get_window_size()[0] / cell_width)):
-                self.coords[y].append(0)
+        self.coords = self.create_list()
         
         self.coords[15][13] = 1
         self.coords[15][12] = 1
         self.coords[14][13] = 1
         self.coords[13][13] = 1
         self.coords[14][11] = 1
+        
+    def create_list(self):
+        list = []
+        for y in range(round(pygame.display.get_window_size()[1] / self.cell_height)):
+            list.append([])
+            for x in range(round(pygame.display.get_window_size()[0] / self.cell_width)):
+                list[y].append(0)
+        return list
         
     def draw_cell(self, x, y, width, height):
         pygame.draw.rect(self.screen, [0, 0, 0], [x, y, width, height], 0)
@@ -34,11 +34,7 @@ class conway:
             pygame.draw.line(self.screen, [0, 0, 0], (0, i), (pygame.display.get_window_size()[0], i))
         
     def update(self):
-        new_coords = []
-        for y in range(round(pygame.display.get_window_size()[1] / self.cell_height)):
-            new_coords.append([])
-            for x in range(round(pygame.display.get_window_size()[0] / self.cell_width)):
-                new_coords[y].append(0)
+        new_coords = self.create_list()
                 
         for y in range(len(self.coords)):
             for x in range(len(self.coords[y])):
@@ -56,9 +52,6 @@ class conway:
         self.cycles += 1
         self.coords = new_coords
         
-    def downdate(self):
-        return
-        
     def render(self):
         pygame.display.set_caption("Cycles: " + str(self.cycles), "")
         self.draw_grid()
@@ -69,21 +62,24 @@ class conway:
         pygame.display.flip()
 
 running=True
-c = conway(1200, 800, 20, 20)
+c = conway(1200, 800, 10, 10)
 c.render()
-while running:
 
+while running:
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    if pygame.mouse.get_pressed()[0]:
+        c.coords[int(mouse_y / c.cell_height)][int(mouse_x / c.cell_width)] = 1
+        c.render()
+    elif pygame.mouse.get_pressed()[2]:
+        c.coords[int(mouse_y / c.cell_height)][int(mouse_x / c.cell_width)] = 0
+        c.render()
+    if pygame.key.get_pressed()[pygame.K_RIGHT]:
+        c.update()
+        c.render()
+        time.sleep(0.07)
     for event in pygame.event.get():
-        if event.type==pygame.MOUSEMOTION:
-            c.mouse_x, c.mouse_y = pygame.mouse.get_pos()
-            #print(c.mouse_x, c.mouse_y)
-        if event.type==pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                c.update()
-                c.render()
         if event.type==pygame.QUIT:
             running=False
-
 
 pygame.quit()
 print("end")
