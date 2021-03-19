@@ -9,12 +9,6 @@ class conway:
         self.cell_height = cell_height
         self.coords = self.create_list()
         
-        self.coords[15][13] = 1
-        self.coords[15][12] = 1
-        self.coords[14][13] = 1
-        self.coords[13][13] = 1
-        self.coords[14][11] = 1
-        
     def create_list(self):
         list = []
         for y in range(round(pygame.display.get_window_size()[1] / self.cell_height)):
@@ -22,6 +16,10 @@ class conway:
             for x in range(round(pygame.display.get_window_size()[0] / self.cell_width)):
                 list[y].append(0)
         return list
+        
+    def clear_cells(self):
+        self.coords = self.create_list()
+        self.cycles = 0
         
     def draw_cell(self, x, y, width, height):
         pygame.draw.rect(self.screen, [0, 0, 0], [x, y, width, height], 0)
@@ -62,7 +60,7 @@ class conway:
         pygame.display.flip()
 
 running=True
-c = conway(1200, 800, 10, 10)
+c = conway(1200, 800, 20, 20)
 c.render()
 
 while running:
@@ -73,13 +71,15 @@ while running:
     elif pygame.mouse.get_pressed()[2]:
         c.coords[int(mouse_y / c.cell_height)][int(mouse_x / c.cell_width)] = 0
         c.render()
-    if pygame.key.get_pressed()[pygame.K_RIGHT]:
+    if pygame.key.get_pressed()[pygame.K_SPACE]:
         c.update()
         c.render()
-        time.sleep(0.07)
+        time.sleep(0.2)
+    if pygame.key.get_pressed()[pygame.K_c]:
+        c.clear_cells()
+        c.render()
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             running=False
 
 pygame.quit()
-print("end")
