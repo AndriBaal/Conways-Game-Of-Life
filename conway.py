@@ -56,13 +56,17 @@ class conway:
         self.cycles += 1
         self.coords = new_coords
         
+    def downdate(self):
+        return
+        
     def render(self):
         pygame.display.set_caption("Cycles: " + str(self.cycles), "")
         self.draw_grid()
         for y in range(len(self.coords)):
             for x in range(len(self.coords[y])):
                 if self.coords[y][x] == True:
-                    self.draw_cell(x*self.cell_width, y*self.cell_height, self.cell_width, self.cell_height) 
+                    self.draw_cell(x*self.cell_width, y*self.cell_height, self.cell_width, self.cell_height)    
+        pygame.display.flip()
 
 running=True
 c = conway(1200, 800, 20, 20)
@@ -80,7 +84,6 @@ while running:
         if event.type==pygame.QUIT:
             running=False
 
-    pygame.display.flip()
 
 pygame.quit()
 print("end")
